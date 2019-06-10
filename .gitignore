@@ -1,0 +1,17 @@
+# node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+.DS_Store
+
+# Env
+.env
+.env.dev
+development.env
+production.env
+
+# NodeJs
+src/api/NodeJs
+
+build/
+build.zip/
