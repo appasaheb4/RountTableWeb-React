@@ -1,96 +1,172 @@
 import React, { Component } from "react";
 import ReactPlayer from 'react-player'
+import { Player, ControlBar } from 'video-react';
+import { Button, Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import openSocket from 'socket.io-client';
 
 
 export default class DashboardScreen extends Component<any, any> {
     constructor ( props: any ) {
         super( props );
         this.state = {
-            playerSource: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
-            inputVideoUrl: 'http://www.w3schools.com/html/mov_bbb.mp4'
+            source: [ "http://media.w3.org/2010/05/sintel/trailer.mp4",
+                "https://media.w3.org/2010/05/sintel/trailer_hd.mp4",
+                "http://media.w3.org/2010/05/bunny/movie.mp4",
+                "https://media.w3.org/2010/05/sintel/trailer_hd.mp4",
+                "http://media.w3.org/2010/05/bunny/movie.mp4",
+                "http://media.w3.org/2010/05/sintel/trailer.mp4"
+            ],
+            socket: openSocket( 'http://round.cmshuawei.com:80' ),
         };
-        this.handleValueChange = this.handleValueChange.bind( this );
-        this.updatePlayerInfo = this.updatePlayerInfo.bind( this );
+        this.play = this.play.bind( this );
+        this.pause = this.pause.bind( this );
+        this.load = this.load.bind( this );
+        this.changeCurrentTime = this.changeCurrentTime.bind( this );
+        this.seek = this.seek.bind( this );
+        this.changePlaybackRateRate = this.changePlaybackRateRate.bind( this );
+        this.changeVolume = this.changeVolume.bind( this );
+        this.setMuted = this.setMuted.bind( this );
     }
 
-    componentDidUpdate( prevProps, prevState ) {
-        if ( this.state.playerSource != prevState.playerSource ) {
-            this.refs.player.load();
-        }
-    }
+    componentDidMount() {
+        // subscribe state change
+        // this.refs.player.subscribeToStateChange( this.handleStateChange.bind( this ) );
+        // this.refs.player4.play();
+        // setTimeout( () => {
+        //     this.refs.player4.load();
+        // }, 5000 );
+        this.state.socket.on( 'videoPlay', player => {
+            console.log( 'play' );
+            console.log( { player } );
+        } );
 
-    handleValueChange( e ) {
-        var value = e.target.value;
-        this.setState( {
-            [ e.target.id ]: value
+        this.state.socket.on( 'videoLoad', player => {
+            console.log( 'playLoad' );
+            console.log( { player } );
         } );
     }
 
-    updatePlayerInfo() {
+
+
+
+    handleData( data ) {
+        let result = JSON.parse( data );
+        console.log( { result, data } );
+        console.log( 'websocket' );
+
+
+    }
+
+
+    playerPlay() {
+
+    }
+
+
+    handleStateChange( state, prevState ) {
+        // copy player state to this component's state
         this.setState( {
-            playerSource: this.state.inputVideoUrl
+            player: state
         } );
     }
+
+    play() {
+        this.refs.player.play();
+    }
+
+    pause() {
+        this.refs.player.pause();
+    }
+
+    load() {
+        this.refs.player.load();
+    }
+
+    changeCurrentTime( seconds ) {
+        return () => {
+            const { player } = this.refs.player.getState();
+            const currentTime = player.currentTime;
+            this.refs.player.seek( currentTime + seconds );
+        };
+    }
+
+    seek( seconds ) {
+        return () => {
+            this.refs.player.seek( seconds );
+        };
+    }
+
+    changePlaybackRateRate( steps ) {
+        return () => {
+            const { player } = this.refs.player.getState();
+            const playbackRate = player.playbackRate;
+            this.refs.player.playbackRate = playbackRate + steps;
+        };
+    }
+
+    changeVolume( steps ) {
+        return () => {
+            const { player } = this.refs.player.getState();
+            const volume = player.volume;
+            this.refs.player.volume = volume + steps;
+        };
+    }
+
+    setMuted( muted ) {
+        return () => {
+            this.refs.player.muted = muted;
+        };
+    }
+
+
 
     render() {
         return (
             <div className="app flex-row align-items-center">
                 <div className="from-gorup" style={ { alignItems: "center", textAlign: "center", marginTop: '7%' } }>
-                    <div className="col-md-4">
-                        <ReactPlayer
-                            url='https://media.w3.org/2010/05/sintel/trailer_hd.mp4'
-                            playing
-                            controls
-                            width="99.9%"
-                            height="100%"
-                        />
+                    <div className="form-group">
+                        <div className="col-md-4">
+                            <Player ref="player" >
+                                <source src={ this.state.source[ 0 ] } />
+                                <ControlBar autoHide={ false } />
+                            </Player>
+                        </div>
+                        <div className="col-md-4">
+                            <Player ref="player1" >
+                                <source src={ this.state.source[ 1 ] } />
+                                <ControlBar autoHide={ false } />
+                            </Player>
+                        </div>
+                        <div className="col-md-4">
+                            <Player ref="player2" >
+                                <source src={ this.state.source[ 2 ] } />
+                                <ControlBar autoHide={ false } />
+                            </Player>
+                        </div>
+                        <div className="clearfix"></div>
                     </div>
-                    <div className="col-md-4">
-                        <ReactPlayer
-                            url='https://media.w3.org/2010/05/sintel/trailer_hd.mp4'
-                            playing
-                            controls
-                            width="99.9%"
-                            height="100%"
-                        />
-                    </div>
-                    <div className="col-md-4">
-                        <ReactPlayer
-                            url='https://media.w3.org/2010/05/sintel/trailer_hd.mp4'
-                            playing
-                            controls
-                            width="99.9%"
-                            height="100%"
-                        />
-                    </div>
-                    <div className="col-md-4" >
-                        <ReactPlayer
-                            url='https://media.w3.org/2010/05/sintel/trailer_hd.mp4'
-                            playing
-                            controls
-                            width="99.9%"
-                            height="100%"
-                        />
-                    </div>
-                    <div className="col-md-4">
-                        <ReactPlayer
-                            url='https://media.w3.org/2010/05/sintel/trailer_hd.mp4'
-                            playing
-                            controls
-                            width="99.9%"
-                            height="100%"
-                        />
-                    </div>
-                    <div className="col-md-4">
-                        <ReactPlayer
-                            url='https://media.w3.org/2010/05/sintel/trailer_hd.mp4'
-                            playing
-                            controls
-                            width="99.9%"
-                            height="100%"
-                        />
+                    <div className="form-group">
+                        <div className="col-md-4" >
+                            <Player ref="player3" >
+                                <source src={ this.state.source[ 3 ] } />
+                                <ControlBar autoHide={ false } />
+                            </Player>
+                        </div>
+                        <div className="col-md-4">
+                            <Player ref="player4" >
+                                <source src={ this.state.source[ 4 ] } />
+                                <ControlBar autoHide={ false } />
+                            </Player>
+                        </div>
+                        <div className="col-md-4">
+                            <Player ref="player5" >
+                                <source src={ this.state.source[ 5 ] } />
+                                <ControlBar autoHide={ false } />
+                            </Player>
+                        </div>
                     </div>
                 </div>
+
             </div>
         );
     }
