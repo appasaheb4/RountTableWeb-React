@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ReactPlayer from 'react-player'
 import { Player, ControlBar } from 'video-react';
 import { Button, Form, FormGroup, Label, Input, Col } from 'reactstrap';
-import openSocket from 'socket.io-client';
+import SocketIOClient from 'socket.io-client';
 
 
 export default class DashboardScreen extends Component<any, any> {
@@ -15,8 +15,7 @@ export default class DashboardScreen extends Component<any, any> {
                 "https://media.w3.org/2010/05/sintel/trailer_hd.mp4",
                 "http://media.w3.org/2010/05/bunny/movie.mp4",
                 "http://media.w3.org/2010/05/sintel/trailer.mp4"
-            ],
-            socket: openSocket( 'http://round.cmshuawei.com:80' ),
+            ]
         };
         this.play = this.play.bind( this );
         this.pause = this.pause.bind( this );
@@ -26,6 +25,7 @@ export default class DashboardScreen extends Component<any, any> {
         this.changePlaybackRateRate = this.changePlaybackRateRate.bind( this );
         this.changeVolume = this.changeVolume.bind( this );
         this.setMuted = this.setMuted.bind( this );
+        this.socket = SocketIOClient( 'http://round.cmshuawei.com:80' );
     }
 
     componentDidMount() {
@@ -35,15 +35,25 @@ export default class DashboardScreen extends Component<any, any> {
         // setTimeout( () => {
         //     this.refs.player4.load();
         // }, 5000 );
-        this.state.socket.on( 'videoPlay', player => {
-            console.log( 'play' );
-            console.log( { player } );
+
+
+
+
+
+        // this.state.socket.on( 'videoPlay', player => {
+        //     console.log( 'play' );
+        //     console.log( { player } );
+        // } );
+
+        // this.state.socket.on( 'videoLoad', player => {
+        //     console.log( 'playLoad' );
+        //     console.log( { player } );
+        // } );
+
+        this.socket.on( 'videoPlay', ( message ) => {
+            console.log( { message } );
         } );
 
-        this.state.socket.on( 'videoLoad', player => {
-            console.log( 'playLoad' );
-            console.log( { player } );
-        } );
     }
 
 
@@ -118,12 +128,13 @@ export default class DashboardScreen extends Component<any, any> {
         };
     }
 
-
-
     render() {
         return (
             <div className="app flex-row align-items-center">
-                <div className="from-gorup" style={ { alignItems: "center", textAlign: "center", marginTop: '7%' } }>
+                <div style={ { alignItems: "flex-end", textAlign: "end", margin: 20 } }>
+                    <a href="/dashboard" style={ { fontSize: 16 } }>Go To Dashboard</a>
+                </div>
+                <div className="from-gorup" style={ { alignItems: "center", textAlign: "center", marginTop: '6%' } }>
                     <div className="form-group">
                         <div className="col-md-4">
                             <Player ref="player" >
