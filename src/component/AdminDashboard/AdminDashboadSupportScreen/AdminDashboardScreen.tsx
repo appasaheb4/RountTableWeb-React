@@ -28,20 +28,12 @@ export default class AdminDashboardScreen extends Component {
     <div className="animated fadeIn pt-1 text-center">Loading...</div>
   );
 
-  componentDidMount() {
-    let loginSeesionData = JSON.parse(
-      window.sessionStorage.getItem( "sessionloginDetails" )
-    );
-    //console.log( { loginSeesionData } );
-    if ( loginSeesionData == null ) {
-      this.props.history.push( "/login" );
-    }
-  }
+
 
   signOut( e: any ) {
     e.preventDefault();
     window.sessionStorage.setItem( "sessionloginDetails", null );
-    this.props.history.push( "/login" );
+
   }
 
   render() {
@@ -78,7 +70,7 @@ export default class AdminDashboardScreen extends Component {
                       />
                     ) : null;
                   } ) }
-                  <Redirect from="/" to="/dashboard" />
+                  <Redirect from="/" to="/userdetails" />
                 </Switch>
               </Suspense>
             </Container>

@@ -7,18 +7,19 @@ import {
 } from "react-router-dom";
 
 
-import DashboardScreen from "./component/DashboardScreen/DashboardScreen";
-import AdminDashboardScreen from "./component/AdminDashboard/AdminDashboardScreen/AdminDashboardScreen";
+import HomeScreen from "./component/HomeScreen/HomeScreen";
+import AdminDashboardScreen from "./component/AdminDashboard/AdminDashboadSupportScreen/AdminDashboardScreen";
 
 
 const routes = () => (
     <Routesr >
         <Switch>
-            <Route exact path={ "/" } component={ DashboardScreen } />
-            <Route exact path={ "/dashboard" } component={ AdminDashboardScreen } />
+            <Route exact path={ "/" } component={ HomeScreen } />
+            <Route path={ "/userdetails" } component={ AdminDashboardScreen } />
             <Route component={ Error } render={ () => <h1>404 Error</h1> } />
         </Switch>
     </Routesr>
 );
+
 
 export default routes;

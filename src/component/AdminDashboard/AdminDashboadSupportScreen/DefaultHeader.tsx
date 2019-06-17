@@ -51,7 +51,7 @@ export default class DefaultHeader extends Component<any, any> {
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
-        <h5 style={ { marginLeft: 10, paddingRight: 20, textAlign: "center" } }>Shrida Plastic</h5>
+        <h5 style={ { marginLeft: 10, paddingRight: 20, textAlign: "center" } }>Round Table</h5>
         <AppSidebarToggler className="d-md-down-none" display="lg" />
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">

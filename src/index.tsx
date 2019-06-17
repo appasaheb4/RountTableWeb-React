@@ -1,9 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import "./App.scss";
 import Router from "./routes";
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render( <Router />, document.getElementById( "root" ) );
 
