@@ -41,14 +41,10 @@ export default class HomeScreen extends Component<any, any> {
         this.socket = io( "http://round.cmshuawei.com:80", { jsonp: false } );
         this.socket.on( "videoPlay", ( data ) => {
             var value = data;
-            console.log( { value } );
             value = value[ 0 ];
-            console.log( { value } );
+            // console.log( { value } );
             if ( value.deviceNo == "Device 1" ) {
-                console.log( 'first calling' );
-                setTimeout( () => {
-                    this.play();
-                }, 100 );
+                this.refs.player.play();
             } else if ( value.deviceNo == "Device 2" ) {
                 this.refs.player1.play();
             }
@@ -66,8 +62,9 @@ export default class HomeScreen extends Component<any, any> {
             }
         } );
         this.socket.on( "stopPlay", ( data ) => {
-            var value = JSON.parse( data );
+            var value = data;
             value = value[ 0 ];
+            // console.log( { value } );
             if ( value.deviceNo == "Device 1" ) {
                 this.refs.player.load();
             } else if ( value.deviceNo == "Device 2" ) {
@@ -87,44 +84,6 @@ export default class HomeScreen extends Component<any, any> {
             }
         } );
     }
-
-    // componentDidMount() {
-    //     // subscribe state change
-    //     // this.refs.player.subscribeToStateChange( this.handleStateChange.bind( this ) );
-    //     // this.refs.player4.play();
-    //     // setTimeout( () => {
-    //     //     this.refs.player4.load();
-    //     // }, 5000 );
-
-
-
-
-
-    //     // this.state.socket.on( 'videoPlay', player => {
-    //     //     console.log( 'play' );
-    //     //     console.log( { player } );
-    //     // } );
-
-    //     // this.state.socket.on( 'videoLoad', player => {
-    //     //     console.log( 'playLoad' );
-    //     //     console.log( { player } );
-    //     // } );
-
-    //     this.connection = new WebSocket( 'wss://echo.websocket.org' );
-    //     this.connection.onmessage = evt => {
-    //         console.log( { data: evt.data } );
-    //     };
-
-    //     // setInterval( _ => {
-    //     //     this.connection.send( Date.now() )
-    //     // }, 2000 )
-
-
-    //     // this.socket.on( 'videoPlay', ( message ) => {
-    //     //     this.refs.player.play();
-    //     // } );
-    // }
-
 
     handleStateChange( state, prevState ) {
         // copy player state to this component's state
